@@ -1,0 +1,82 @@
+import unittest
+import sys
+import os
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+from data.documentos import DOCUMENTOS
+from src.ingest import chunk_text, construir_indice
+from src.retriever import buscar, re_rankear
+from src.agent import detectar_urgencia, procesar_consulta
+
+
+class TestIngest(unittest.TestCase):
+    def test_chunking_respeta_overlap(self):
+        texto = " ".join([f"palabra{i}" for i in range(100)])
+        chunks = chunk_text(texto, chunk_size=40, overlap=10)
+        self.assertGreater(len(chunks), 1)
+        # Verifica que exista traslape entre chunks consecutivos
+        palabras_c1 = chunks[0].split()[-10:]
+        palabras_c2 = chunks[1].split()[:10]
+        self.assertEqual(palabras_c1, palabras_c2)
+
+    def test_construir_indice_genera_metadata(self):
+        indice = construir_indice(DOCUMENTOS)
+        self.assertTrue(len(indice) >= len(DOCUMENTOS))
+        for chunk in indice:
+            self.assertIn("sede", chunk)
+            self.assertIn("tipo", chunk)
+            self.assertIn("categoria", chunk)
+
+
+class TestRetriever(unittest.TestCase):
+    def setUp(self):
+        self.indice = construir_indice(DOCUMENTOS)
+
+    def test_buscar_encuentra_examen_sangre(self):
+        resultados = buscar(self.indice, "examen de sangre ayuno")
+        self.assertTrue(len(resultados) > 0)
+        self.assertIn("sangre", resultados[0]["texto"].lower())
+
+    def test_filtro_por_sede(self):
+        resultados = buscar(
+            self.indice, "examen de sangre", sede_filtro="Las Condes"
+        )
+        sedes = {r["sede"] for r in resultados}
+        self.assertTrue(sedes.issubset({"Las Condes", "Todas", "Externa"}))
+
+    def test_rerank_prioriza_interna(self):
+        chunks = [
+            {"tipo": "externa", "score": 0.9, "chunk_id": "a"},
+            {"tipo": "interna", "score": 0.5, "chunk_id": "b"},
+        ]
+        resultado = re_rankear(chunks)
+        self.assertEqual(resultado[0]["tipo"], "interna")
+
+
+class TestAgent(unittest.TestCase):
+    def setUp(self):
+        self.indice = construir_indice(DOCUMENTOS)
+
+    def test_detecta_urgencia(self):
+        self.assertTrue(detectar_urgencia("tengo un dolor fuerte en el pecho"))
+        self.assertFalse(detectar_urgencia("necesito saber sobre mi examen"))
+
+    def test_escala_en_caso_de_urgencia(self):
+        resultado = procesar_consulta(self.indice, "tengo un sangrado importante")
+        self.assertTrue(resultado["escalado"])
+
+    def test_responde_con_fuente_citada(self):
+        resultado = procesar_consulta(
+            self.indice, "ayuno para examen de sangre", sede="Providencia"
+        )
+        self.assertFalse(resultado["escalado"])
+        self.assertIn("Fuente:", resultado["respuesta"])
+
+    def test_sin_informacion_deriva(self):
+        resultado = procesar_consulta(self.indice, "quiero saber sobre kinesiología")
+        self.assertTrue(resultado["escalado"])
+
+
+if __name__ == "__main__":
+    unittest.main()
