@@ -1,0 +1,48 @@
+flowchart TD
+    subgraph Interaccion["1. Capa de Interacción"]
+        A[Paciente<br/>Web / WhatsApp / App]
+    end
+
+    subgraph Orquestador["2. Orquestador / Agente"]
+        B[Agente Controlador]
+        B1[Gestor de Contexto<br/>historial de conversación]
+        B2[Clasificador de Intención<br/>consulta simple / urgente / ambigua]
+    end
+
+    subgraph RAG["3. Módulo RAG"]
+        C[Prompt de Reformulación<br/>de Consulta]
+        D[Retriever]
+        E1[(Vector Store<br/>Documentos Internos)]
+        E2[(Vector Store<br/>Guías MINSAL - Externo)]
+        F[Re-ranking<br/>prioriza fuente interna]
+    end
+
+    subgraph Generacion["4. Módulo de Generación"]
+        G[LLM Generador<br/>+ Prompt de Respuesta]
+        H{¿Contexto suficiente<br/>y sin señal de urgencia?}
+    end
+
+    subgraph Escalamiento["5. Módulo de Escalamiento"]
+        I[Cola de Derivación<br/>Call Center Humano]
+    end
+
+    subgraph Salida["6. Capa de Salida"]
+        J[Respuesta al paciente<br/>+ cita de fuente]
+    end
+
+    A --> B
+    B <--> B1
+    B --> B2
+    B2 -->|consulta informativa| C
+    B2 -->|urgencia / síntoma| I
+    C --> D
+    D --> E1
+    D --> E2
+    E1 --> F
+    E2 --> F
+    F --> G
+    G --> H
+    H -->|Sí| J
+    H -->|No / ambiguo| I
+    J --> A
+    I --> A
