@@ -1,0 +1,31 @@
+#Demostracion por consola del agente de Clinica Vitalis.
+
+
+from data.documentos import DOCUMENTOS
+from src.ingest import construir_indice
+from src.agent import procesar_consulta
+
+CONSULTAS_DEMO = [
+    ("¿Necesito ayuno para el examen de sangre?", "Providencia"),
+    ("¿Qué cubre el convenio con Consalud?", None),
+    ("Tengo un dolor fuerte en el pecho, ¿que hago?", None),
+    ("¿Puedo tomar sol despues de mi consulta de dermatologia?", None),
+]
+
+
+def main():
+    print("=== Indexando documentos de Clinica Vitalis ===")
+    indice = construir_indice(DOCUMENTOS)
+    print(f"Total de chunks indexados: {len(indice)}\n")
+
+    for consulta, sede in CONSULTAS_DEMO:
+        print(f"Paciente ({sede or 'sede no especificada'}): {consulta}")
+        resultado = procesar_consulta(indice, consulta, sede=sede)
+        print(f"Agente: {resultado['respuesta']}")
+        print(f"[escalado_a_humano={resultado['escalado']}, "
+              f"chunks_usados={resultado['chunks_usados']}]")
+        print("-" * 70)
+
+
+if __name__ == "__main__":
+    main()
