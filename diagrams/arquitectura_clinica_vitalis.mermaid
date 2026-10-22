@@ -1,0 +1,51 @@
+flowchart TD
+    subgraph Entrada["1. Capa de Interacción"]
+        A[Paciente<br/>Consola / Web / WhatsApp]
+    end
+
+    subgraph Memoria["2. Sistema de Memoria"]
+        M1[Memoria de Corto Plazo<br/>Ventana conversacional activa]
+        M2[(Memoria de Largo Plazo<br/>data/memoria_largo_plazo.json)]
+    end
+
+    subgraph Agente["3. Núcleo del Agente y LLM"]
+        B[Agente Orquestador Clinica Vitalis]
+        LLM[Motor LLM: Gemini / Ollama<br/>System Prompt + Few-Shot]
+        P[Planificador y Clasificador Adaptativo]
+    end
+
+    subgraph Herramientas["4. Herramientas de Ejecución (Tools)"]
+        H1[Protocolo de Emergencia<br/>Ruta A: Derivación Médica 131]
+        H2[Agendar o Modificar Cita<br/>Ruta B: Escritura data/citas.json]
+        H3[Generador de Comprobantes<br/>Ruta B: Archivo .txt data/reportes/]
+        H4[Consultar Información Clínica<br/>Ruta C: Motor RAG]
+    end
+
+    subgraph RAGModule["5. Base Vectorial y Documental"]
+        V[(Base Vectorial Chroma / Embeddings)]
+        D[Re-ranking por Prioridad<br/>Interna > Externa]
+    end
+
+    subgraph Salida["6. Capa de Salida"]
+        S[Respuesta Personalizada al Paciente]
+    end
+
+    A --> B
+    B <--> M1
+    B <--> M2
+    B --> LLM
+    LLM --> P
+
+    P -->|Ruta A: Urgencia o Síntomas Críticos| H1
+    P -->|Ruta B: Reserva / Modificación / Anulación| H2
+    H2 --> H3
+    P -->|Ruta C: Dudas / Protocolos / Convenios| H4
+
+    H4 --> V
+    V --> D
+    D --> H4
+
+    H1 --> S
+    H3 --> S
+    H4 --> S
+    S --> A

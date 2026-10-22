@@ -1,0 +1,13 @@
+# Framework de agentes y LLM
+langchain>=0.2.0
+langchain-core>=0.2.0
+langchain-community>=0.2.0
+langchain-google-genai>=1.0.0
+langchain-ollama>=0.1.0
+
+# Base vectorial y embeddings
+chromadb>=0.5.0
+
+# Utilidades y entorno
+python-dotenv>=1.0.0
+pydantic>=2.0.0
