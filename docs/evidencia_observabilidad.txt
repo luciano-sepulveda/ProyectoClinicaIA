@@ -1,0 +1,11 @@
+EVIDENCIA DE OBSERVABILIDAD - CLINICA VITALIS
+Comando: python evaluar_observabilidad.py
+
+
+EVALUACION DE OBSERVABILIDAD - CLINICA VITALIS
+Escenarios evaluados: 7
+Escenarios correctos: 7
+Precision operacional: 100.00%
+Latencia media: 2.66 ms
+Consistencia de respuesta: SI
+Registros guardados en: data/observabilidad/ejecuciones.jsonl

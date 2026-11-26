@@ -1,0 +1,10 @@
+.env
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+chroma_db/
+data/reportes/
+data/citas.json
+data/memoria_largo_plazo.json

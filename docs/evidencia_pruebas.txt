@@ -1,0 +1,40 @@
+EVIDENCIA DE PRUEBAS UNITARIAS - CLINICA VITALIS
+Comando: python -m unittest discover -s tests -v
+
+Spreadsheet runtime warmup failed during python startup
+Traceback (most recent call last):
+  File "/tmp/tmp.QlpUkOUI9D/artifact_tool_v2-2.8.66/artifact_tool/patches/warm_spreadsheet_runtime_on_startup.py", line 26, in warm_spreadsheet_runtime_on_startup
+  File "/tmp/tmp.QlpUkOUI9D/artifact_tool_v2-2.8.66/artifact_tool/spreadsheet_warmup.py", line 785, in warm_spreadsheet_runtime
+  File "/tmp/tmp.QlpUkOUI9D/artifact_tool_v2-2.8.66/artifact_tool/spreadsheet_warmup.py", line 718, in _warm_feature_flows
+  File "/tmp/tmp.QlpUkOUI9D/artifact_tool_v2-2.8.66/artifact_tool/spreadsheet_warmup.py", line 509, in _warm_drawing_and_image_flows
+  File "/tmp/tmp.QlpUkOUI9D/artifact_tool_v2-2.8.66/artifact_tool/generated/interface/models.py", line 32861, in bring_to_front
+  File "/tmp/tmp.QlpUkOUI9D/artifact_tool_v2-2.8.66/artifact_tool/rpc/remote.py", line 764, in __call__
+  File "/tmp/tmp.QlpUkOUI9D/artifact_tool_v2-2.8.66/artifact_tool/rpc/client.py", line 175, in call
+artifact_tool.rpc.client.RemoteError: Element ordering requires an owning element collection.
+test_agente_manejo_error_cita_no_cae (test_pipeline.TestAgent.test_agente_manejo_error_cita_no_cae) ... ok
+test_antecedentes_usados_en_respuesta_posterior (test_pipeline.TestAgent.test_antecedentes_usados_en_respuesta_posterior) ... ok
+test_compatibilidad_procesar_consulta (test_pipeline.TestAgent.test_compatibilidad_procesar_consulta) ... ok
+test_detecta_urgencia_compleja_y_respiracion (test_pipeline.TestAgent.test_detecta_urgencia_compleja_y_respiracion) ... ok
+test_extraer_datos_cita_manana_con_y_sin_enie (test_pipeline.TestAgent.test_extraer_datos_cita_manana_con_y_sin_enie) ... ok
+test_memoria_corto_plazo_completa_datos_en_siguiente_turno (test_pipeline.TestAgent.test_memoria_corto_plazo_completa_datos_en_siguiente_turno) ... ok
+test_ruta_a_urgencia_prioritaria (test_pipeline.TestAgent.test_ruta_a_urgencia_prioritaria) ... ok
+test_ruta_b_pregunta_si_faltan_datos (test_pipeline.TestAgent.test_ruta_b_pregunta_si_faltan_datos) ... ok
+test_ruta_c_sin_informacion_deriva_a_humano (test_pipeline.TestAgent.test_ruta_c_sin_informacion_deriva_a_humano) ... ok
+test_urgencia_en_medio_de_conversacion (test_pipeline.TestAgent.test_urgencia_en_medio_de_conversacion) ... ok
+test_chunking_respeta_overlap (test_pipeline.TestIngest.test_chunking_respeta_overlap) ... ok
+test_construir_indice_genera_metadata (test_pipeline.TestIngest.test_construir_indice_genera_metadata) ... ok
+test_memoria_corto_plazo (test_pipeline.TestMemory.test_memoria_corto_plazo) ... ok
+test_memoria_largo_plazo_persistencia_json (test_pipeline.TestMemory.test_memoria_largo_plazo_persistencia_json) ... ok
+test_buscar_encuentra_examen_sangre (test_pipeline.TestRetriever.test_buscar_encuentra_examen_sangre) ... ok
+test_buscar_encuentra_horario_atencion (test_pipeline.TestRetriever.test_buscar_encuentra_horario_atencion) ... ok
+test_filtro_por_sede (test_pipeline.TestRetriever.test_filtro_por_sede) ... ok
+test_rerank_prioriza_interna (test_pipeline.TestRetriever.test_rerank_prioriza_interna) ... ok
+test_generar_comprobante_en_directorio_temporal (test_pipeline.TestTools.test_generar_comprobante_en_directorio_temporal) ... ok
+test_herramienta_agendamiento_modificacion_y_anulacion (test_pipeline.TestTools.test_herramienta_agendamiento_modificacion_y_anulacion) ... ok
+test_herramienta_consulta_clinica (test_pipeline.TestTools.test_herramienta_consulta_clinica) ... ok
+test_herramienta_manejo_error_no_encontrada (test_pipeline.TestTools.test_herramienta_manejo_error_no_encontrada) ... ok
+
+----------------------------------------------------------------------
+Ran 22 tests in 0.044s
+
+OK
